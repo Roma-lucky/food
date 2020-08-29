@@ -10,7 +10,8 @@ window.addEventListener('DOMContentLoaded', () => {
 
     function hideTabContent() {
         tabsContent.forEach(item => {
-            item.style.display = 'none';
+            item.classList.add('hide');
+            item.classList.remove('show');
         });
         tabs.forEach(item => {
             item.classList.remove('tabheader__item_active');
@@ -18,7 +19,8 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 
     function showTabContent(i = 0) {
-        tabsContent[i].style.display = 'block';
+        tabsContent[i].classList.add('show');
+        tabsContent[i].classList.remove('hide');
         tabs[i].classList.add('tabheader__item_active');
     }
 
@@ -40,7 +42,7 @@ window.addEventListener('DOMContentLoaded', () => {
     });
     // Timer
 
-    const deadLine = '2020-08-28';
+    const deadLine = '2020-09-01';
 
     function getTimeRemaining(endtime) {
         const t = Date.parse(endtime) - Date.parse(new Date()),
@@ -84,4 +86,40 @@ window.addEventListener('DOMContentLoaded', () => {
         }
     }
     setClock('.timer', deadLine);
+
+    // Modal
+
+    const   modalTrigger = document.querySelector('[data-modal]'),
+            modalCloseBtn = document.querySelector('[data-close]'),
+            modal = document.querySelector('.modal');
+
+
+    
+            // ------------------- 1 Этот отрабатывает
+            modalTrigger.addEventListener('click', () => {
+                modal.style.display = 'block';
+                
+                
+        
+            });
+            modalCloseBtn.addEventListener('click', () => {
+                modal.style.display = "none";
+                
+        
+            });
+            
+            // ----------------------2 не работает. хотя до этого классы show и hide отрабатывали
+            modalTrigger.addEventListener('click', () => {
+                modal.classList.add('show');
+                modal.classList.remove('hide');
+                
+        
+            });
+            modalCloseBtn.addEventListener('click', () => {
+                modal.classList.add('hide');
+                modal.classList.remove('show');
+        
+            });
+            
+
 });
