@@ -1,11 +1,9 @@
-
-
 window.addEventListener('DOMContentLoaded', () => {
 
     // Tabs
     const tabs = document.querySelectorAll('.tabheader__item'),
-            tabsContent = document.querySelectorAll('.tabcontent'),
-            tabsParent = document.querySelector('.tabheader__items');
+        tabsContent = document.querySelectorAll('.tabcontent'),
+        tabsParent = document.querySelector('.tabheader__items');
 
 
     function hideTabContent() {
@@ -33,7 +31,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
         if (target && target.classList.contains('tabheader__item')) {
             tabs.forEach((elem, i) => {
-                if(target == elem) {
+                if (target == elem) {
                     hideTabContent();
                     showTabContent(i);
                 }
@@ -46,30 +44,30 @@ window.addEventListener('DOMContentLoaded', () => {
 
     function getTimeRemaining(endtime) {
         const t = Date.parse(endtime) - Date.parse(new Date()),
-                days = Math.floor(t / (1000 * 60 * 60 * 24)),
-                hours = Math.floor((t / 1000 * 60 * 60) % 24),
-                minutes = Math.floor((t / 1000 / 60 ) % 60),
-                seconds = Math.floor((t / 1000) % 60);
+            days = Math.floor(t / (1000 * 60 * 60 * 24)),
+            hours = Math.floor((t / 1000 * 60 * 60) % 24),
+            minutes = Math.floor((t / 1000 / 60) % 60),
+            seconds = Math.floor((t / 1000) % 60);
 
-                return {
-                    total: t,
-                    d: days,
-                    h: hours,
-                    m: minutes,
-                    s: seconds
-                };
+        return {
+            total: t,
+            d: days,
+            h: hours,
+            m: minutes,
+            s: seconds
+        };
 
     }
 
     function setClock(selector, endtime) {
         const timer = document.querySelector(selector),
-                days = timer.querySelector('#days'),
-                hours = timer.querySelector('#hours'),
-                minutes = timer.querySelector('#minutes'),
-                seconds = timer.querySelector('#seconds'),
-                timeInterval = setInterval(updateClock, 1000);
+            days = timer.querySelector('#days'),
+            hours = timer.querySelector('#hours'),
+            minutes = timer.querySelector('#minutes'),
+            seconds = timer.querySelector('#seconds'),
+            timeInterval = setInterval(updateClock, 1000);
 
-        
+
 
         function updateClock() {
             const t = getTimeRemaining(endtime);
@@ -89,37 +87,52 @@ window.addEventListener('DOMContentLoaded', () => {
 
     // Modal
 
-    const   modalTrigger = document.querySelector('[data-modal]'),
-            modalCloseBtn = document.querySelector('[data-close]'),
-            modal = document.querySelector('.modal');
+    const   modal = document.querySelector('.modal'),
+            dataModal = document.querySelectorAll('[data-modal]'),
+            closeModal = document.querySelector('[modal-close]');
 
+    function showModalWindow() {
+        modal.classList.add('show');
+        modal.classList.remove('hide');
+        document.body.style.overflow = 'hidden';
+        clearInterval(modalTimerId);
+    }
 
     
-            // ------------------- 1 Этот отрабатывает
-            modalTrigger.addEventListener('click', () => {
-                modal.style.display = 'block';
-                
-                
+    function closeModalFoo() {
+        modal.classList.add('hide');
+        modal.classList.remove('show');
+        document.body.style.overflow = '';
         
-            });
-            modalCloseBtn.addEventListener('click', () => {
-                modal.style.display = "none";
-                
+    }
+
+    dataModal.forEach(e => {
+        e.addEventListener('click', showModalWindow);
+    });
+    closeModal.addEventListener('click', closeModalFoo);
+
+    modal.addEventListener('click', (event) => {
+        if (event.target === modal) {
+            closeModalFoo();
+        }
+    });
+    document.addEventListener('keydown', (btn) => {
+        if(btn.code === "Escape" && modal.classList.contains('show')) {
+            closeModalFoo();
+        }
+    });
+
+    const modalTimerId = setTimeout(showModalWindow, 3000);
+
+    function showModalByScroll() {
+        if(document.documentElement.clientHeight + window.pageYOffset >= document.documentElement.scrollHeight) {
+            showModalWindow();
+            window.removeEventListener('scroll', showModalByScroll);
+        }
+    }
+
+    window.addEventListener('scroll', showModalByScroll);
         
-            });
-            
-            // ----------------------2 не работает. хотя до этого классы show и hide отрабатывали
-            modalTrigger.addEventListener('click', () => {
-                modal.classList.add('show');
-                modal.classList.remove('hide');
-                
-        
-            });
-            modalCloseBtn.addEventListener('click', () => {
-                modal.classList.add('hide');
-                modal.classList.remove('show');
-        
-            });
-            
+
 
 });
